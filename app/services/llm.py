@@ -21,8 +21,8 @@ llm = Groq(model='llama3-70b-8192', api_key=api_key)
 
 reader = DoclingReader()
 node_parser = MarkdownNodeParser()
-# docs = reader.load_data("https://msie-file-67.ezihost.net/")
-docs = reader.load_data("https://pt.wikipedia.org/wiki/Furia_Esports")
+docs = reader.load_data("https://msie-file-67.ezihost.net/")
+# docs = reader.load_data("https://pt.wikipedia.org/wiki/Furia_Esports")
 vector_index = VectorStoreIndex.from_documents(documents=docs,transformations=[node_parser],embed_model=embed_model, storage_context=storage_context)
 
 def get_prompt(query):
