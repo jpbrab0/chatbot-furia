@@ -7,9 +7,7 @@ from llama_index.core.node_parser import MarkdownNodeParser
 from llama_index.embeddings.huggingface import HuggingFaceEmbedding
 from llama_index.core import (
     VectorStoreIndex,
-    load_index_from_storage
 )
-from llama_index.core.memory import ChatSummaryMemoryBuffer
 from ..database.chroma import storage_context
 
 load_dotenv()
@@ -17,12 +15,11 @@ load_dotenv()
 embed_model = HuggingFaceEmbedding(model_name="sentence-transformers/all-MiniLM-L6-v2")
 api_key = os.environ['GROQ_KEY']
 
-llm = Groq(model='llama3-70b-8192', api_key=api_key)
+llm = Groq(model='meta-llama/llama-4-scout-17b-16e-instruct', api_key=api_key)
 
 reader = DoclingReader()
 node_parser = MarkdownNodeParser()
-docs = reader.load_data("https://msie-file-67.ezihost.net/")
-# docs = reader.load_data("https://pt.wikipedia.org/wiki/Furia_Esports")
+docs = reader.load_data("https://installed-agreed-25.ezihost.net/")
 vector_index = VectorStoreIndex.from_documents(documents=docs,transformations=[node_parser],embed_model=embed_model, storage_context=storage_context)
 
 def get_prompt(query):
@@ -32,7 +29,8 @@ def get_prompt(query):
         Gere uma resposta detalhada para a consulta feita com base apenas no contexto obtido:
         Caso forem feitas perguntas de elenco sempre pegue o elenco ativo e atual do ano em que estamos.
         Query: {query}
-
+        Context: {docs}
+        
         Instruções:
         1. Exiba a consulta e a resposta gerada com base no contexto.
         2. Sua resposta deve ser detalhada e abranger todos os aspectos do contexto.
